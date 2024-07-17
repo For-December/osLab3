@@ -73,6 +73,26 @@ func main() {
 			}
 			currentDir = dir
 
+		case "cat":
+			if len(args) != 2 {
+				fmt.Println("Usage: cat <file_name>")
+				continue
+			}
+			content := fs.ReadFileContent(currentDir, args[1])
+			if content != nil {
+				fmt.Println(string(content))
+			}
+
+		case "echo":
+			if len(args) < 4 || args[len(args)-2] != ">>" {
+				println(len(args))
+				fmt.Println("Usage: echo 'content' >> <file_name>")
+				continue
+			}
+			content := strings.Join(args[1:len(args)-2], " ")
+			fileName := args[len(args)-1]
+			fs.AppendToFile(currentDir, fileName, []byte(content))
+
 		default:
 			fmt.Println("Unknown command")
 		}

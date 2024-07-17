@@ -23,6 +23,8 @@ type Directory struct {
 type FileSystem struct {
 	Root       *Directory
 	FreeBlocks []bool // 空闲块管理
+
+	MockRawBlocks []Block
 }
 
 type Block struct {

@@ -22,15 +22,15 @@ func (fs *FileSystem) ReadFile(file *File) []byte {
 	var data []byte
 	for _, blockIndex := range file.Blocks {
 		// 读取每个块的数据
-		data = append(data, GetBlockData(blockIndex)...)
+		data = append(data, fs.GetBlockData(blockIndex)...)
 	}
 	return data
 }
 
-// 模拟获取块数据
-func GetBlockData(blockIndex int) []byte {
-	// 在真实实现中，这里会从磁盘读取数据
-	return []byte{} // 这里返回空数据
+// GetBlockData 模拟获取块数据
+func (fs *FileSystem) GetBlockData(blockIndex int) []byte {
+	// 从模拟原始块（磁盘）中获取数据
+	return fs.MockRawBlocks[blockIndex].Data[:]
 }
 
 func (fs *FileSystem) WriteFile(file *File, data []byte) {
@@ -48,8 +48,8 @@ func (fs *FileSystem) WriteFile(file *File, data []byte) {
 			return
 		}
 		file.Blocks = append(file.Blocks, blockIndex)
-		// 写入数据到块
-		WriteBlockData(blockIndex, data[i*BlockSize:min((i+1)*BlockSize, len(data))])
+		// 写入数据到块，这里限定了每个块的大小为 BlockSize
+		fs.WriteBlockData(blockIndex, data[i*BlockSize:min((i+1)*BlockSize, len(data))])
 	}
 
 	file.Size = len(data)
@@ -66,9 +66,11 @@ func (fs *FileSystem) allocateBlock() int {
 	return -1
 }
 
-// 模拟写入块数据
-func WriteBlockData(blockIndex int, data []byte) {
-	// 在真实实现中，这里会写入数据到磁盘
+// WriteBlockData 模拟写入块数据
+func (fs *FileSystem) WriteBlockData(blockIndex int, data []byte) {
+	// 写入到模拟原始块（磁盘）
+	// 已限定了每个块的大小为 BlockSize
+	copy(fs.MockRawBlocks[blockIndex].Data[:], data)
 }
 
 func (fs *FileSystem) DeleteFile(dir *Directory, fileName string) {
@@ -84,4 +86,26 @@ func (fs *FileSystem) DeleteFile(dir *Directory, fileName string) {
 	}
 
 	delete(dir.Files, fileName)
+}
+
+func (fs *FileSystem) ReadFileContent(dir *Directory, fileName string) []byte {
+	file, exists := dir.Files[fileName]
+	if !exists {
+		fmt.Println("File does not exist")
+		return nil
+	}
+
+	return fs.ReadFile(file)
+}
+
+func (fs *FileSystem) AppendToFile(dir *Directory, fileName string, data []byte) {
+	file, exists := dir.Files[fileName]
+	if !exists {
+		fmt.Println("File does not exist")
+		return
+	}
+
+	existingData := fs.ReadFile(file)
+	newData := append(existingData, data...)
+	fs.WriteFile(file, newData)
 }

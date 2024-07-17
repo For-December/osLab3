@@ -8,7 +8,8 @@ func NewFileSystem() *FileSystem {
 			SubDirs:     make(map[string]*Directory),
 			Permissions: "rwx",
 		},
-		FreeBlocks: make([]bool, TotalBlocks),
+		FreeBlocks:    make([]bool, TotalBlocks),
+		MockRawBlocks: make([]Block, TotalBlocks),
 	}
 
 	// 初始化所有块为空闲
