@@ -12,8 +12,9 @@ func main() {
 	fs := file_sys.NewFileSystem()
 	currentDir := fs.Root
 
+	pwd := currentDir.Name
 	for {
-		fmt.Print("> ")
+		fmt.Print("[ " + pwd + " ] > ")
 		reader := bufio.NewReader(os.Stdin)
 		input, _ := reader.ReadString('\n')
 		// 去除输入中的换行符
@@ -62,6 +63,7 @@ func main() {
 					fmt.Println("已在根目录！")
 					continue
 				}
+				pwd = strings.TrimSuffix(pwd, currentDir.Name+"/")
 				currentDir = currentDir.Parent
 				continue
 			}
@@ -72,6 +74,7 @@ func main() {
 				continue
 			}
 			currentDir = dir
+			pwd += currentDir.Name + "/"
 
 		case "cat":
 			if len(args) != 2 {
@@ -95,7 +98,8 @@ func main() {
 			content := strings.Join(args[1:len(args)-2], " ")
 			fileName := args[len(args)-1]
 			fs.AppendToFile(currentDir, fileName, []byte(content))
-
+		case "tree":
+			fs.Tree(currentDir, "")
 		default:
 			fmt.Println("Unknown command")
 		}

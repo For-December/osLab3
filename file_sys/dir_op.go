@@ -45,3 +45,14 @@ func (fs *FileSystem) ListDirectory(dir *Directory) {
 		fmt.Printf("文件 (%s) => %s\n", dir.Permissions, fileName)
 	}
 }
+
+func (fs *FileSystem) Tree(dir *Directory, prefix string) {
+	for _, subDir := range dir.SubDirs {
+		fmt.Printf("%s|-- %s/\n", prefix, subDir.Name)
+		fs.Tree(subDir, prefix+"|   ")
+	}
+
+	for name := range dir.Files {
+		fmt.Printf("%s|-- %s\n", prefix, name)
+	}
+}
