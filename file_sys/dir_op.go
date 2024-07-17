@@ -4,7 +4,7 @@ import "fmt"
 
 func (fs *FileSystem) CreateDirectory(parent *Directory, dirName string, permissions string) *Directory {
 	if _, exists := parent.SubDirs[dirName]; exists {
-		fmt.Println("Directory already exists")
+		fmt.Println("目录已存在！")
 		return nil
 	}
 
@@ -22,7 +22,7 @@ func (fs *FileSystem) CreateDirectory(parent *Directory, dirName string, permiss
 func (fs *FileSystem) DeleteDirectory(parent *Directory, dirName string) {
 	dir, exists := parent.SubDirs[dirName]
 	if !exists {
-		fmt.Println("Directory does not exist")
+		fmt.Println("该目录不存在！")
 		return
 	}
 
@@ -39,9 +39,9 @@ func (fs *FileSystem) DeleteDirectory(parent *Directory, dirName string) {
 
 func (fs *FileSystem) ListDirectory(dir *Directory) {
 	for subDirName := range dir.SubDirs {
-		fmt.Println("Directory:", subDirName)
+		fmt.Printf("目录 (%s) => %s\n", dir.Permissions, subDirName)
 	}
 	for fileName := range dir.Files {
-		fmt.Println("File:", fileName)
+		fmt.Printf("文件 (%s) => %s\n", dir.Permissions, fileName)
 	}
 }
