@@ -85,7 +85,10 @@ func main() {
 
 		case "echo":
 			if len(args) < 4 || args[len(args)-2] != ">>" {
-				println(len(args))
+
+				for _, a := range args {
+					fmt.Println(a)
+				}
 				fmt.Println("Usage: echo 'content' >> <file_name>")
 				continue
 			}
