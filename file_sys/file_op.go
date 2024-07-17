@@ -4,7 +4,7 @@ import "fmt"
 
 func (fs *FileSystem) CreateFile(dir *Directory, fileName string, permissions string) *File {
 	if _, exists := dir.Files[fileName]; exists {
-		fmt.Println("File already exists")
+		fmt.Println("该文件已存在！")
 		return nil
 	}
 
@@ -44,7 +44,7 @@ func (fs *FileSystem) WriteFile(file *File, data []byte) {
 		// 分配新的块
 		blockIndex := fs.allocateBlock()
 		if blockIndex == -1 {
-			fmt.Println("No free blocks available")
+			fmt.Println("可用空间不足！")
 			return
 		}
 		file.Blocks = append(file.Blocks, blockIndex)
@@ -76,7 +76,7 @@ func (fs *FileSystem) WriteBlockData(blockIndex int, data []byte) {
 func (fs *FileSystem) DeleteFile(dir *Directory, fileName string) {
 	file, exists := dir.Files[fileName]
 	if !exists {
-		fmt.Println("File does not exist")
+		fmt.Println("文件不存在！")
 		return
 	}
 
@@ -91,7 +91,7 @@ func (fs *FileSystem) DeleteFile(dir *Directory, fileName string) {
 func (fs *FileSystem) ReadFileContent(dir *Directory, fileName string) []byte {
 	file, exists := dir.Files[fileName]
 	if !exists {
-		fmt.Println("File does not exist")
+		fmt.Println("文件不存在！")
 		return nil
 	}
 

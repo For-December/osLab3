@@ -59,7 +59,7 @@ func main() {
 			}
 			if args[1] == ".." {
 				if currentDir == fs.Root {
-					fmt.Println("Already at root")
+					fmt.Println("已在根目录！")
 					continue
 				}
 				currentDir = currentDir.Parent
@@ -68,7 +68,7 @@ func main() {
 
 			dir, exists := currentDir.SubDirs[args[1]]
 			if !exists {
-				fmt.Println("Directory does not exist")
+				fmt.Println("目录不存在！")
 				continue
 			}
 			currentDir = dir

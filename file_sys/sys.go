@@ -8,7 +8,9 @@ func NewFileSystem() *FileSystem {
 			SubDirs:     make(map[string]*Directory),
 			Permissions: "rwx",
 		},
-		FreeBlocks:    make([]bool, TotalBlocks),
+		FreeBlocks: make([]bool, TotalBlocks),
+
+		// 模拟磁盘块
 		MockRawBlocks: make([]Block, TotalBlocks),
 	}
 
